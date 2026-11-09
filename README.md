@@ -1,161 +1,166 @@
-# AI Intelligent Platform
+# Intelligent Agent Platform
 
-An intelligent multi-agent platform designed to orchestrate AI agents, execute tasks, evaluate responses, and monitor LLM performance through a unified interface.
+An intelligent multi-agent platform that automatically routes user queries to specialized AI agents, evaluates their performance, monitors execution, and tracks LLM usage and costs.
 
-The project focuses on building a practical AI engineering platform using modern backend technologies, agent orchestration frameworks, LLM integrations, evaluation tools, and observability.
 
-## Project Vision
+## Project Objectives
 
-The goal is to build a platform where users can submit tasks and allow intelligent agents to collaborate to solve them.
-
-The platform will support:
-
-- Multiple AI agents with specialized responsibilities.
-- Intelligent task routing and orchestration.
-- Integration with multiple Large Language Models.
-- Automated evaluation of AI-generated responses.
-- LLM monitoring, tracing, and cost tracking.
-- A dashboard to visualize agent execution and performance.
+- Intelligent query classification and agent routing
+- Specialized AI agents for different tasks
+- Support for OpenAI and Ollama
+- Automated agent evaluation
+- Monitoring and structured logging
+- LLM token usage and cost tracking
+- Interactive analytics dashboard
 
 ## Technology Stack
 
-| Layer | Technology |
+| Component | Technology |
 |---|---|
-| Frontend | React, Tailwind CSS |
-| Backend | Python, FastAPI |
+| Frontend | React + Vite + Tailwind CSS |
+| Backend | Python + FastAPI |
 | Agent Orchestration | LangGraph |
 | LLM Integration | LiteLLM |
-| AI Models | OpenAI, Ollama |
-| Primary Database | MongoDB |
-| Caching | Redis |
 | Evaluation | DeepEval |
 | Observability | Langfuse |
-| Data Visualization | Recharts |
-| Containerization | Docker |
-| Backend Testing | Pytest |
-| Frontend Testing | Vitest |
+| Database | MongoDB |
+| Cache | Redis |
+| Deployment | Docker |
+| Testing | Pytest + Vitest |
 
-## High-Level Architecture
+## Architecture Overview
+
 
 ```mermaid
 flowchart TD
     A[User] --> B[React Frontend]
     B --> C[FastAPI Backend]
-    C --> D[API Layer]
-    D --> E[Agent Router]
-    E --> F[LangGraph Orchestrator]
-    F --> G[Specialized AI Agents]
-    G --> H[LiteLLM]
-    H --> I[OpenAI]
-    H --> J[Ollama]
-
-    F --> K[Evaluation - DeepEval]
-    F --> L[Observability - Langfuse]
-    C --> M[(MongoDB)]
-    C --> N[(Redis)]
+    C --> D[Query Router]
+    D --> E[LangGraph Orchestrator]
+    E --> F[Specialized AI Agents]
+    F --> G[LiteLLM]
+    G --> H[Ollama]
+    G --> I[OpenAI]
+    F --> J[DeepEval]
+    F --> K[Langfuse]
+    C --> L[MongoDB]
+    C --> M[Redis]
 ```
 
-*This diagram represents the planned overall architecture. Components will be implemented incrementally.*
+> Note: This diagram represents the target architecture. Currently, the project foundation and Ollama-based LLM integration are implemented. Other components will be developed incrementally.
 
 ## Project Structure
 
 ```text
-ai-intelligent-platform/
-│
-├── backend/
-│   ├── app/
-│   │   ├── agents/
-│   │   ├── api/
-│   │   │   └── v1/
-│   │   │       └── endpoints/
-│   │   │           └── health.py
-│   │   ├── core/
-│   │   │   └── config.py
-│   │   ├── cost_tracking/
-│   │   ├── database/
-│   │   │   ├── mongodb.py
-│   │   │   └── redis.py
-│   │   ├── evaluation/
-│   │   ├── llm/
-│   │   ├── models/
-│   │   ├── observability/
-│   │   ├── orchestration/
-│   │   ├── router/
-│   │   ├── schemas/
-│   │   └── main.py
-│   │
-│   ├── datasets/
-│   ├── tests/
-│   │   ├── integration/
-│   │   └── unit/
-│   ├── requirements.txt
-│   └── .env
-│
-├── frontend/
-│   ├── public/
-│   └── src/
-│       ├── assets/
-│       ├── charts/
-│       ├── components/
-│       ├── hooks/
-│       ├── pages/
-│       └── services/
-│
-├── docs/
-│   ├── architecture/
-│   │   └── application-lifecycle.md
-│   ├── database/
-│   │   └── database-setup.md
-│   ├── api/
-│   ├── workflows/
-│   ├── development/
-│   └── decisions/
-│
-├── docker-compose.yml
-├── .env.example
-├── .gitignore
-└── README.md
+intelligent-agent-platform/
+â”‚
+â”œâ”€â”€ backend/
+â”‚   â”œâ”€â”€ app/
+â”‚   â”‚   â”œâ”€â”€ agents/
+â”‚   â”‚   â”œâ”€â”€ api/
+â”‚   â”‚   â”œâ”€â”€ core/
+â”‚   â”‚   â”œâ”€â”€ cost_tracking/
+â”‚   â”‚   â”œâ”€â”€ database/
+â”‚   â”‚   â”œâ”€â”€ evaluation/
+â”‚   â”‚   â”œâ”€â”€ llm/
+â”‚   â”‚   â”œâ”€â”€ models/
+â”‚   â”‚   â”œâ”€â”€ observability/
+â”‚   â”‚   â”œâ”€â”€ orchestration/
+â”‚   â”‚   â”œâ”€â”€ router/
+â”‚   â”‚   â””â”€â”€ schemas/
+â”‚   â”‚
+â”‚   â”œâ”€â”€ datasets/
+â”‚   â”œâ”€â”€ tests/
+â”‚   â””â”€â”€ requirements.txt
+â”‚
+â”œâ”€â”€ frontend/
+â”‚   â”œâ”€â”€ public/
+â”‚   â””â”€â”€ src/
+â”‚
+â”œâ”€â”€ docs/
+â”‚   â”œâ”€â”€ architecture/
+â”‚   â”œâ”€â”€ database/
+â”‚   â”œâ”€â”€ api/
+â”‚   â”œâ”€â”€ workflows/
+â”‚   â”œâ”€â”€ development/
+â”‚   â””â”€â”€ decisions/
+â”‚
+â”œâ”€â”€ docker-compose.yml
+â”œâ”€â”€ .env.example
+â”œâ”€â”€ .gitignore
+â””â”€â”€ README.md
 ```
 
-## Current Implementation
+## Implementation Progress
 
-### Phase 1 – Project Foundation
+| Phase | Description | Status |
+|---|---|---|
+| Phase 1 | Project Foundation â€“ FastAPI, MongoDB, Redis, Docker | Completed |
+| Phase 2 | LLM Integration â€“ LiteLLM and Ollama | Completed |
+| Phase 3 | Multi-Agent System â€“ LangGraph | Upcoming |
+| Phase 4 | Agent Evaluation â€“ DeepEval | Upcoming |
+| Phase 5 | Monitoring and Cost Tracking â€“ Langfuse | Upcoming |
+| Phase 6 | Frontend Dashboard â€“ React and Tailwind CSS | Upcoming |
+| Phase 7 | Testing and Deployment | Upcoming |
 
-**Completed**
+## Completed Features
 
-- Initial project structure created.
-- Python virtual environment configured.
-- FastAPI backend initialized.
-- Environment-based configuration implemented.
-- Docker Desktop configured.
-- MongoDB 7 container configured.
-- Redis 7 container configured.
-- Persistent Docker volumes configured.
-- Asynchronous MongoDB connection implemented.
-- Asynchronous Redis connection implemented.
-- FastAPI lifespan integration implemented.
-- Application health-check endpoint implemented.
-- Architecture and database documentation added.
+### Phase 1 â€“ Project Foundation
 
-### Health Check API
+- Created the backend project structure using FastAPI.
+- Configured application settings using Pydantic Settings.
+- Integrated MongoDB for persistent storage.
+- Integrated Redis for caching.
+- Configured MongoDB and Redis using Docker Compose.
+- Implemented application startup and shutdown lifecycle.
+- Created a health-check API to monitor database connections.
 
-**Endpoint**
+### Phase 2 â€“ LLM Integration
 
-`GET /api/v1/health`
+- Integrated LiteLLM as a unified LLM interface.
+- Connected Ollama as the local LLM provider.
+- Integrated the Qwen 2.5 Coder 1.5B model.
+- Created a reusable LLM service.
+- Implemented provider selection for Ollama and OpenAI.
+- Created a FastAPI endpoint for LLM chat.
+- Added Pydantic request validation.
+- Tested successful requests, invalid providers, empty messages, and default provider selection.
 
-Example response:
+**Available API:**
+
+`POST /api/v1/llm/chat`
+
+### Example Request
 
 ```json
 {
-    "status": "healthy",
-    "application": "AI Intelligent Platform",
-    "version": "0.1.0",
-    "components": {
-        "mongodb": "healthy",
-        "redis": "healthy"
-    }
+  "message": "Explain Java Streams",
+  "provider": "ollama"
 }
 ```
+
+### Example Response
+
+```json
+{
+  "provider": "ollama",
+  "response": "Java Streams allow collection processing using a functional programming style."
+}
+```
+
+> Note: Ollama is currently working. OpenAI provider configuration and API key setup are pending.
+
+### Documentation
+
+### Architecture
+
+- [Application Lifecycle](docs/architecture/application-lifecycle.md)
+- [LLM Integration Architecture](docs/architecture/llm-integration.md)
+
+### Database
+- [Database Setup](docs/database/database-setup.md)
+- [LLM Chat API](docs/api/llm-api.md)
+
 
 ## Getting Started
 
@@ -163,106 +168,61 @@ Example response:
 
 - Python 3.12+
 - Docker Desktop
+- Ollama
 - Git
-- Visual Studio Code or another Python IDE
 
 ### 1. Clone the repository
 
 ```bash
-git clone <your-github-repository-url>
+git clone https://github.com/Pooesh/intelligent-agent-platform.git
 cd intelligent-agent-platform
 ```
 
-### 2. Start infrastructure services
+### 2. Start MongoDB and Redis
 
-From the project root:
-
-```powershell
+```bash
 docker compose up -d
 ```
 
-Verify the containers:
+### 3. Start Ollama
 
-```powershell
-docker compose ps
+Make sure Ollama is running and the required model is available:
+
+```bash
+ollama pull qwen2.5-coder:1.5b
 ```
 
-### 3. Configure the backend
+### 4. Set up the backend
 
-Navigate to the backend:
-
-```powershell
+```bash
 cd backend
-```
 
-Create and activate the virtual environment:
-
-```powershell
 python -m venv .venv
-```
 
-```powershell
+# Windows PowerShell
 .\.venv\Scripts\Activate.ps1
-```
 
-Install dependencies:
-
-```powershell
 python -m pip install -r requirements.txt
 ```
 
-Create your local `.env` file using the example configuration and update any required values.
+### 5. Start FastAPI
 
-### 4. Start FastAPI
-
-```powershell
+```bash
 python -m uvicorn app.main:app --reload
 ```
 
-### 5. Access the application
+### 6. Open API documentation
 
-| Resource | URL |
-|---|---|
-| Backend | http://127.0.0.1:8000 |
-| Swagger UI | http://127.0.0.1:8000/docs |
-| Health Check | http://127.0.0.1:8000/api/v1/health |
+Visit:
 
-## Project Roadmap
+`http://localhost:8000/docs`
 
-| Phase | Description | Status |
-|---|---|---|
-| 1 | Project Foundation and Infrastructure | In progress |
-| 2 | LLM Integration – OpenAI and Ollama | Planned |
-| 3 | Multi-Agent System using LangGraph | Planned |
-| 4 | AI Response Evaluation using DeepEval | Planned |
-| 5 | Observability and Cost Tracking | Planned |
-| 6 | Frontend Dashboard | Planned |
-| 7 | Testing, Dockerization and Deployment | Planned |
+## Future Enhancements
 
-## Documentation
-
-Detailed project documentation is maintained in the `docs/` directory.
-
-- `docs/architecture/` – Application architecture and lifecycle.
-- `docs/database/` – Database design and setup.
-- `docs/api/` – API specifications.
-- `docs/workflows/` – Application and agent workflows.
-- `docs/development/` – Development setup and roadmap.
-- `docs/decisions/` – Architecture and technology decisions.
-
-## Development Philosophy
-
-This project is being developed incrementally.
-
-Each phase focuses on:
-
-1. Understanding the problem and architecture.
-2. Designing the required components.
-3. Implementing functionality step by step.
-4. Testing individual modules.
-5. Documenting implementation decisions.
-6. Integrating components into the overall platform.
-
-## Future Vision
-
-The long-term goal is to develop a practical AI engineering platform that demonstrates multi-agent orchestration, model flexibility, evaluation, observability, and production-oriented backend engineering.
+- Implement multi-agent orchestration using LangGraph.
+- Integrate OpenAI as an additional LLM provider.
+- Implement automated agent evaluation using DeepEval.
+- Add observability and cost tracking using Langfuse.
+- Build an interactive analytics dashboard.
+- Add comprehensive automated testing.
+- Containerize and deploy the complete platform.

@@ -1,10 +1,11 @@
-
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
 from app.core.config import settings
+
 from app.api.v1.endpoints.health import router as health_router
+from app.api.v1.endpoints.llm import router as llm_router
 
 from app.database.mongodb import (
     connect_to_mongodb,
@@ -38,7 +39,6 @@ async def lifespan(app: FastAPI):
         print("Application shutdown completed")
 
 
-# Create FastAPI application
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
@@ -50,6 +50,11 @@ app = FastAPI(
 # Register API routers
 app.include_router(
     health_router,
+    prefix=settings.api_v1_prefix,
+)
+
+app.include_router(
+    llm_router,
     prefix=settings.api_v1_prefix,
 )
 

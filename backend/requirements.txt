@@ -4,3 +4,4 @@ pymongo
 redis
 httpx
 python-dotenv
+litellm==1.108.3

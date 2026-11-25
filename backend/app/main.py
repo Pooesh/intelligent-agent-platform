@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-
+from app.api.v1.endpoints.agents import router as agents_router
 from fastapi import FastAPI
 
 from app.core.config import settings
@@ -57,6 +57,11 @@ app.include_router(
     llm_router,
     prefix=settings.api_v1_prefix,
 )
+app.include_router(
+    agents_router,
+    prefix=settings.api_v1_prefix,
+)
+
 
 
 @app.get("/")

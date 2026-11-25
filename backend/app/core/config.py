@@ -25,12 +25,15 @@ class Settings(BaseSettings):
     # Ollama configuration
     ollama_base_url: str = "http://localhost:11434"
 
+    # Tavily web search configuration
+    tavily_api_key: str = ""
+
     # Frontend configuration
     frontend_origins: str = "http://localhost:5173"
 
     # Environment variable configuration
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file="backend/.env",
         env_file_encoding="utf-8",
         extra="ignore"
     )

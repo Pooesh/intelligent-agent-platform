@@ -52,7 +52,8 @@ class SupervisorAgent:
         if any(keyword in query for keyword in math_keywords):
             return "math"
 
-        if re.search(r"\d+\s*[\+\-\*/]\s*\d+", query):
+        # Detect basic arithmetic expressions
+        if re.search(r"\d+\s*[+\-*/]\s*\d+", query):
             return "math"
 
         # 3. Detect research and comparison requests
@@ -64,6 +65,7 @@ class SupervisorAgent:
             "advantages and disadvantages",
             "pros and cons",
             "architecture of",
+            "architecture",
             "research",
             "investigate",
             "evaluate",
@@ -79,7 +81,22 @@ class SupervisorAgent:
         if any(keyword in query for keyword in research_keywords):
             return "research"
 
-        # 4. Use the LLM for ambiguous queries
+        # 4. Detect general knowledge and everyday questions
+        general_keywords = [
+            "benefits of",
+            "what are the benefits",
+            "importance of",
+            "meaning of",
+            "what is",
+            "who is",
+            "how does",
+            "why is",
+        ]
+
+        if any(keyword in query for keyword in general_keywords):
+            return "general"
+
+        # 5. Use the LLM for ambiguous queries
         prompt = f"""
         You are the Supervisor Agent of an AI Intelligent Platform.
 

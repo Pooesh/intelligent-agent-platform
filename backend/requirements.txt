@@ -7,3 +7,5 @@ python-dotenv
 litellm==1.108.3
 langgraph==1.2.20
 tavily-python==0.8.5
+deepeval==4.3.5
+ollama==0.6.3

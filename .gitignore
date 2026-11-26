@@ -80,3 +80,6 @@ desktop.ini
 # ==========================================
 
 *.pid
+
+# Generated evaluation results
+backend/evaluation_results.json

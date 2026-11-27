@@ -92,6 +92,7 @@ Provide a complete and helpful programming response.
         response = await self.llm_service.generate_response(
             message=prompt,
             provider="ollama",
+            agent_name="coding",
         )
 
         return response

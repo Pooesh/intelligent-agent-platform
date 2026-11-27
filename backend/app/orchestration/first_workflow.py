@@ -1,15 +1,16 @@
-# 1. Imports
+
 from typing import TypedDict
+
 from langgraph.graph import StateGraph, START, END
 
 
-# 2. State definition
+# 1. State definition
 class BasicState(TypedDict):
     user_query: str
     response: str
 
 
-# 3. First workflow node
+# 2. First workflow node
 def process_query(state: BasicState) -> dict:
 
     query = state["user_query"]
@@ -21,7 +22,7 @@ def process_query(state: BasicState) -> dict:
     }
 
 
-# 4. Create LangGraph workflow
+# 3. Create LangGraph workflow
 workflow = StateGraph(BasicState)
 
 workflow.add_node("process_query", process_query)
@@ -29,13 +30,18 @@ workflow.add_node("process_query", process_query)
 workflow.add_edge(START, "process_query")
 workflow.add_edge("process_query", END)
 
-app = workflow.compile()
 
-# 5. Execute the workflow
-result = app.invoke({
-    "user_query": "What is LangGraph?",
-    "response": ""
-})
+# 4. Compile workflow
+workflow_app = workflow.compile()
 
-# Display the result
-print(result)
+
+# 5. Execute workflow only when this file runs directly
+if __name__ == "__main__":
+
+    result = workflow_app.invoke({
+        "user_query": "What is LangGraph?",
+        "response": ""
+    })
+
+    print("Workflow Result:")
+    print(result)

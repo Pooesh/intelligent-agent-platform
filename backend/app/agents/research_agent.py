@@ -465,6 +465,7 @@ Do not fill evidence gaps with assumptions.
         response = await self.llm_service.generate_response(
             message=prompt,
             provider="ollama",
+            agent_name="research",
         )
 
         # Step 10: Append references exactly once.

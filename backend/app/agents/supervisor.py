@@ -142,6 +142,7 @@ class SupervisorAgent:
         result = await self.llm_service.generate_response(
             message=prompt,
             provider="ollama",
+            agent_name="supervisor",
         )
 
         category = result.strip().lower()

@@ -1,3 +1,4 @@
+
 from fastapi import APIRouter, HTTPException
 
 from app.llm.llm_service import LLMService
@@ -16,6 +17,7 @@ async def chat_with_llm(request: LLMRequest):
         response = await llm_service.generate_response(
             message=request.message,
             provider=request.provider,
+            agent_name="direct_llm_api",
         )
 
         return LLMResponse(

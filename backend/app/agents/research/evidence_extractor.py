@@ -360,6 +360,7 @@ Evidence:
                 response = await self.llm_service.generate_response(
                     message=prompt,
                     provider="ollama",
+                    agent_name="evidence_verifier",
                 )
 
                 print(
@@ -515,7 +516,7 @@ Evidence:
                     "text": sentence_item["text"]
                 })
 
-        # NEW: Diagnostic logging of the exact candidate IDs.
+        # Diagnostic logging of the exact candidate IDs.
         print(
             f"\n========== {framework} CANDIDATE SENTENCES =========="
         )
@@ -592,6 +593,7 @@ Candidate sentences:
             response = await self.llm_service.generate_response(
                 message=prompt,
                 provider="ollama",
+                agent_name="evidence_extractor",
             )
         except Exception as exc:
             print(f"LLM extraction failed for {framework}: {exc}")

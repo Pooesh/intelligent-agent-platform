@@ -1,6 +1,6 @@
 # Intelligent Agent Platform
 
-An intelligent multi-agent platform that automatically classifies user queries and routes them to specialized AI agents. The platform integrates LLMs, research capabilities, and agent orchestration, with evaluation, observability, and cost tracking planned as subsequent phases.
+An intelligent multi-agent platform that automatically classifies user queries and routes them to specialized AI agents. The platform integrates LLMs, research capabilities, agent orchestration, evaluation, observability, token usage tracking, cost monitoring, and an interactive analytics dashboard.
 
 ## Project Objectives
 
@@ -9,7 +9,7 @@ An intelligent multi-agent platform that automatically classifies user queries a
 - Support for multiple LLM providers through LiteLLM
 - Research using official documentation and validated evidence
 - Automated agent evaluation
-- Monitoring and structured logging
+- Execution monitoring and structured logging
 - LLM token usage and cost tracking
 - Interactive analytics dashboard
 
@@ -22,8 +22,8 @@ An intelligent multi-agent platform that automatically classifies user queries a
 | Agent Orchestration | LangGraph |
 | LLM Integration | LiteLLM |
 | Local LLM | Ollama |
-| Evaluation | DeepEval (planned) |
-| Observability | Langfuse (planned) |
+| Evaluation | DeepEval |
+| Observability | Langfuse SDK + Custom Monitoring |
 | Database | MongoDB |
 | Cache | Redis |
 | Research Search | Tavily Search API |
@@ -34,117 +34,134 @@ An intelligent multi-agent platform that automatically classifies user queries a
 
 ```mermaid
 flowchart TD
-    A[User] --> B[FastAPI Backend]
-    B --> C[Agent API]
-    C --> D[LangGraph Workflow]
-    D --> E[Supervisor Agent]
+    A[User] --> B[React Frontend]
+    B --> C[FastAPI Backend]
 
-    E --> F[Coding Agent]
-    E --> G[Math Agent]
-    E --> H[Research Agent]
-    E --> I[General Agent]
+    C --> D[Agent API]
+    D --> E[LangGraph Workflow]
+    E --> F[Supervisor Agent]
 
-    F --> J[LiteLLM]
-    G --> J
-    H --> K[Web Search Service]
-    H --> L[Evidence Extractor]
-    H --> J
-    I --> J
+    F --> G[Coding Agent]
+    F --> H[Math Agent]
+    F --> I[Research Agent]
+    F --> J[General Agent]
 
-    J --> M[Ollama]
-    J -. Planned .-> N[OpenAI]
+    G --> K[LiteLLM]
+    H --> K
+    I --> L[Web Search Service]
+    L --> M[Evidence Extractor]
+    M --> K
+    J --> K
 
-    B --> O[MongoDB]
-    B --> P[Redis]
+    K --> N[Ollama]
+    K -. Optional provider .-> O[OpenAI]
+
+    G --> P[Agent Response]
+    H --> P
+    I --> P
+    J --> P
+
+    C --> Q[Execution Tracking]
+    C --> R[Token and Cost Tracking]
+    Q --> S[MongoDB]
+    R --> S
+
+    S --> T[Observability APIs]
+    T --> B
+
+    C --> U[Redis]
+    C --> V[DeepEval Evaluation]
+    C --> W[Langfuse Integration]
 ```
-
-> Note: The FastAPI backend, Ollama integration, LangGraph orchestration, specialist agents, and initial research pipeline are implemented. Evaluation, observability, cost tracking, and the frontend are planned.
 
 ## Project Structure
 
 ```text
 intelligent-agent-platform/
-�
-+-- backend/
-�   +-- app/
-�   �   +-- agents/
-�   �   �   +-- research/
-�   �   �   �   +-- evidence_extractor.py
-�   �   �   +-- coding_agent.py
-�   �   �   +-- math_agent.py
-�   �   �   +-- research_agent.py
-�   �   �   +-- general_agent.py
-�   �   �   +-- supervisor.py
-�   �   �
-�   �   +-- api/
-�   �   �   +-- v1/
-�   �   �       +-- endpoints/
-�   �   �           +-- agents.py
-�   �   �           +-- llm.py
-�   �   �
-�   �   +-- core/
-�   �   +-- database/
-�   �   +-- llm/
-�   �   +-- orchestration/
-�   �   �   +-- graph.py
-�   �   �   +-- state.py
-�   �   �   +-- first_workflow.py
-�   �   �
-�   �   +-- schemas/
-�   �   +-- services/
-�   �       +-- web_search_service.py
-�   �
-�   +-- requirements.txt
-�   +-- test_*.py
-�
-+-- frontend/
-�
-+-- docs/
-�   +-- architecture/
-�   �   +-- application-lifecycle.md
-�   �   +-- llm-integration.md
-�   �   +-- multi-agent-system.md
-�   �   +-- research-agent.md
-�   �
-�   +-- database/
-�   �   +-- database-setup.md
-�   �
-�   +-- api/
-�       +-- llm-api.md
-�       +-- agent-api.md
-�
-+-- docker-compose.yml
-+-- .env.example
-+-- .gitignore
-+-- README.md
+│
+├── backend/
+│   ├── app/
+│   │   ├── agents/
+│   │   │   ├── research/
+│   │   │   │   └── evidence_extractor.py
+│   │   │   ├── coding_agent.py
+│   │   │   ├── math_agent.py
+│   │   │   ├── research_agent.py
+│   │   │   ├── general_agent.py
+│   │   │   └── supervisor.py
+│   │   │
+│   │   ├── api/
+│   │   │   └── v1/
+│   │   │       └── endpoints/
+│   │   │           ├── agents.py
+│   │   │           ├── llm.py
+│   │   │           └── observability.py
+│   │   │
+│   │   ├── core/
+│   │   ├── database/
+│   │   ├── llm/
+│   │   ├── orchestration/
+│   │   ├── observability/
+│   │   ├── cost_tracking/
+│   │   ├── schemas/
+│   │   └── services/
+│   │
+│   ├── requirements.txt
+│   └── test_*.py
+│
+├── frontend/
+│   ├── src/
+│   │   ├── charts/
+│   │   │   ├── AgentDistributionChart.jsx
+│   │   │   ├── TokenConsumptionChart.jsx
+│   │   │   └── ExecutionPerformanceChart.jsx
+│   │   ├── hooks/
+│   │   │   └── useDashboardData.js
+│   │   ├── pages/
+│   │   │   └── Dashboard.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   ├── App.jsx
+│   │   └── index.css
+│   └── package.json
+│
+├── docs/
+│   ├── architecture/
+│   ├── api/
+│   └── database/
+│
+├── docker-compose.yml
+├── .env.example
+├── .gitignore
+└── README.md
 ```
 
 ## Implementation Progress
 
 | Phase | Description | Status |
 |---|---|---|
-| Phase 1 | Project Foundation � FastAPI, MongoDB, Redis, Docker | Completed |
-| Phase 2 | LLM Integration � LiteLLM and Ollama | Completed |
-| Phase 3 | Multi-Agent System � LangGraph and Research Agent | Completed |
-| Phase 4 | Agent Evaluation � DeepEval | Upcoming |
-| Phase 5 | Observability � Langfuse | Upcoming |
-| Phase 6 | LLM Usage and Cost Tracking | Upcoming |
-| Phase 7 | Frontend Dashboard � React and Tailwind CSS | Upcoming |
-| Phase 8 | Testing, Deployment and Final Improvements | Upcoming |
+| Phase 1 | Project Foundation – FastAPI, MongoDB, Redis, Docker | Completed |
+| Phase 2 | LLM Integration – LiteLLM and Ollama | Completed |
+| Phase 3 | Multi-Agent System – LangGraph and specialist agents | Completed |
+| Phase 4 | Execution Tracking and Observability APIs | Completed |
+| Phase 5 | Token Usage and Cost Tracking | Implemented |
+| Phase 6 | Agent Evaluation – DeepEval | Initial implementation |
+| Phase 7 | Frontend Monitoring Dashboard | Completed |
+| Phase 8 | Testing, Deployment and Final Improvements | In progress |
 
 ## Completed Features
 
-### Phase 1 � Project Foundation
+### Phase 1 – Project Foundation
 
 - Created the backend project structure using FastAPI.
 - Configured application settings using Pydantic Settings.
 - Integrated MongoDB for persistent storage.
-- Integrated Redis for caching.
+- Integrated Redis for in-memory data services.
 - Configured MongoDB and Redis using Docker Compose.
 - Implemented application startup and shutdown lifecycle.
 - Created a health-check API to monitor database connections.
 
-### Phase 2 � LLM Integration
+### Phase 2 – LLM Integration
 
 - Integrated LiteLLM as a unified LLM interface.
 - Connected Ollama as the local LLM provider.
@@ -177,9 +194,9 @@ intelligent-agent-platform/
 }
 ```
 
-> Note: Ollama is currently working. OpenAI provider configuration and API key setup are pending.
+Note: Ollama is currently configured and tested. OpenAI provider credentials and configuration are not yet enabled.
 
-### Phase 3 � Multi-Agent System and Research Agent
+### Phase 3 – Multi-Agent System
 
 - Integrated LangGraph for multi-agent orchestration.
 - Implemented a supervisor agent for query classification.
@@ -190,12 +207,7 @@ intelligent-agent-platform/
   - General Agent
 - Implemented conditional routing based on the selected agent.
 - Integrated specialist agents with the reusable LLM service.
-- Implemented Tavily-based research search.
-- Added official documentation source filtering.
-- Implemented evidence extraction using Ollama.
-- Added deterministic exact-match evidence validation.
-- Implemented evidence deduplication and framework-based grouping.
-- Generated grounded research comparisons with source references.
+- Implemented a shared workflow state.
 - Added a FastAPI endpoint for agent queries.
 
 **Available API:**
@@ -206,7 +218,7 @@ intelligent-agent-platform/
 
 ```json
 {
-  "user_query": "Compare LangGraph, CrewAI, and AutoGen based on their official documentation."
+  "user_query": "Write Java code to find duplicate numbers using Stream API."
 }
 ```
 
@@ -214,44 +226,121 @@ intelligent-agent-platform/
 
 ```json
 {
-  "selected_agent": "research",
-  "agent_response": "Research comparison with supporting source references..."
+  "selected_agent": "coding",
+  "agent_response": "Java Stream API solution..."
 }
 ```
 
-**Current Research Capabilities**
+#### Research Agent Capabilities
 
 - Searches official documentation sources.
 - Filters unsupported sources.
 - Extracts candidate evidence.
 - Validates evidence against original source content.
-- Generates comparisons when validated evidence is available for all three frameworks.
+- Implements evidence deduplication and framework-based grouping.
+- Generates grounded research comparisons with source references.
 
-> Note: Research quality improvements, including broader source coverage, better content extraction, and stronger evidence selection, are reserved for the final polishing phase.
+Research quality improvements, including broader source coverage, better content extraction, and stronger evidence selection, are reserved for the final polishing phase.
 
-## Documentation
+### Phase 4 – Execution Tracking and Observability
 
-### Architecture
+- Implemented execution tracking.
+- Records execution IDs, queries, selected agents, status, execution duration, and errors.
+- Persists execution records in MongoDB.
+- Added APIs to retrieve recent executions and individual execution details.
+- Implemented recent execution monitoring.
 
-- [Application Lifecycle](docs/architecture/application-lifecycle.md)
-- [LLM Integration Architecture](docs/architecture/llm-integration.md)
-- [Multi-Agent System Architecture](docs/architecture/multi-agent-system.md)
-- [Research Agent Architecture](docs/architecture/research-agent.md)
+**MongoDB Collection:**
 
-### Database
+`execution_logs`
 
-- [Database Setup](docs/database/database-setup.md)
+**Available APIs:**
 
-### API
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/v1/observability/executions` | Retrieve recent executions |
+| GET | `/api/v1/observability/executions/{execution_id}` | Retrieve execution details |
 
-- [LLM Chat API](docs/api/llm-api.md)
-- [Agent API](docs/api/agent-api.md)
+### Phase 5 – Token Usage and Cost Tracking
+
+- Integrated LiteLLM usage extraction.
+- Tracks prompt tokens and completion tokens.
+- Calculates total token consumption.
+- Records estimated provider API cost.
+- Associates usage records with agent names and model information.
+- Persists usage information in MongoDB.
+- Provides usage history and aggregated usage summaries.
+
+**MongoDB Collection:**
+
+`llm_usage`
+
+**Available APIs:**
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/v1/observability/usage` | Retrieve recent LLM usage |
+| GET | `/api/v1/observability/usage/summary` | Retrieve aggregated usage statistics |
+
+Note: Local Ollama API cost is recorded as zero because the model runs locally. This does not represent the electricity or hardware cost of local execution.
+
+### Phase 6 – Agent Evaluation
+
+- Integrated DeepEval.
+- Created an evaluation workflow for agent responses.
+- Added dataset-based evaluation.
+- Implemented deterministic evaluation checks.
+
+Current evaluation runs with the LLM judge disabled. Further evaluation metrics, quality analysis, and automated assessment improvements remain part of the next development steps.
+
+### Phase 7 – Frontend Monitoring Dashboard
+
+Implemented a React-based monitoring dashboard using Vite, Tailwind CSS, Axios, Recharts, and Lucide React.
+
+**Dashboard Features**
+
+- Total execution metrics.
+- LLM request metrics.
+- Total token consumption.
+- Estimated API cost.
+- Agent activity overview.
+- Agent distribution chart.
+- Token consumption chart.
+- Execution performance chart.
+- Recent executions table.
+- Recent LLM usage table.
+- Dashboard refresh functionality.
+
+**Dashboard Charts**
+
+| Chart | Purpose |
+|---|---|
+| Agent Distribution | Visualizes execution distribution across agents |
+| Token Consumption | Compares prompt and completion tokens by agent |
+| Execution Performance | Displays average execution duration by agent |
+
+The frontend retrieves monitoring data from the FastAPI observability APIs.
+
+### Phase 8 – Testing, Deployment and Final Improvements
+
+Current and planned improvements:
+
+- Expand automated backend and frontend testing.
+- Improve evaluation quality and coverage.
+- Improve research evidence selection and extraction.
+- Improve dashboard data accuracy and performance.
+- Add detailed execution inspection and error monitoring.
+- Optimize frontend bundle size.
+- Improve provider configuration and error handling.
+- Prepare the application for production deployment.
+- Complete end-to-end testing.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.12+
+- Node.js and npm
 - Docker Desktop
 - Ollama
 - Git
@@ -271,7 +360,7 @@ docker compose up -d
 
 ### 3. Start Ollama
 
-Make sure Ollama is running and the required model is available:
+Ensure Ollama is running and the required model is available:
 
 ```bash
 ollama pull qwen2.5-coder:1.5b
@@ -279,13 +368,15 @@ ollama pull qwen2.5-coder:1.5b
 
 ### 4. Configure Environment Variables
 
-Create your local `.env` file using the example:
+Create your local environment file using the example:
 
 ```powershell
 Copy-Item .env.example backend/.env
 ```
 
-Update the environment variables according to your local configuration. Keep API keys and secrets out of Git.
+Update the configuration according to your local environment.
+
+Keep API keys, passwords, and secrets out of Git.
 
 ### 5. Set Up the Backend
 
@@ -294,10 +385,15 @@ cd backend
 
 python -m venv .venv
 
-# Windows PowerShell
 .\.venv\Scripts\Activate.ps1
 
 python -m pip install -r requirements.txt
+```
+
+If PowerShell blocks virtual environment activation, run:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
 ### 6. Start FastAPI
@@ -306,24 +402,90 @@ python -m pip install -r requirements.txt
 python -m uvicorn app.main:app --reload
 ```
 
-### 7. Open API Documentation
+Backend API:
 
-Visit:
+`http://localhost:8000`
 
-http://localhost:8000/docs
+Swagger documentation:
 
-Available endpoints include:
+`http://localhost:8000/docs`
 
-- `GET /api/v1/health`
-- `POST /api/v1/llm/chat`
-- `POST /api/v1/agents/chat`
+### 7. Set Up the Frontend
 
-## Future Enhancements
+Open another terminal:
 
-- Configure and test OpenAI as an additional LLM provider.
-- Implement automated agent evaluation using DeepEval.
-- Add observability and tracing using Langfuse.
-- Implement token usage and cost tracking.
-- Build an interactive analytics dashboard.
-- Add comprehensive automated testing.
-- Containerize and deploy the complete application using Docker.
+```powershell
+cd frontend
+
+npm install
+```
+
+Create a local `.env.local` file:
+
+```env
+VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1
+```
+
+Start the frontend:
+
+```powershell
+npm run dev
+```
+
+Frontend dashboard:
+
+`http://localhost:5173`
+
+### 8. Run Frontend Validation
+
+```powershell
+npm run lint
+npm run build
+```
+
+### 9. Run Backend Tests
+
+From the backend directory with the virtual environment activated:
+
+```powershell
+pytest
+```
+
+## Documentation
+
+### Architecture
+
+- [Application Lifecycle](docs/architecture/application-lifecycle.md)
+- [LLM Integration Architecture](docs/architecture/llm-integration.md)
+- [Multi-Agent System Architecture](docs/architecture/multi-agent-system.md)
+- [Research Agent Architecture](docs/architecture/research-agent.md)
+
+### Database
+
+- [Database Setup](docs/database/database-setup.md)
+
+### API
+
+- [LLM Chat API](docs/api/llm-api.md)
+- [Agent API](docs/api/agent-api.md)
+
+
+
+- [Observability and Cost Tracking](docs/architecture/observability-and-cost-tracking.md)
+- [Frontend Dashboard](docs/architecture/frontend-dashboard.md)
+
+
+## Future Improvements
+
+- Configure and test additional cloud LLM providers.
+- Expand DeepEval evaluation metrics and coverage.
+- Complete and verify end-to-end Langfuse tracing.
+- Improve token and cost reporting accuracy.
+- Add detailed execution inspection and error monitoring.
+- Improve frontend performance and visualization.
+- Expand research quality and evidence validation.
+- Implement production deployment and CI/CD.
+
+## Project Goal
+
+The goal of the Intelligent Agent Platform is to build a modular, extensible, and observable AI system that combines specialized agents, LLM orchestration, evaluation, and monitoring into a unified platform.

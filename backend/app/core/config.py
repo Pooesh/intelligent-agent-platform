@@ -31,9 +31,14 @@ class Settings(BaseSettings):
     # Frontend configuration
     frontend_origins: str = "http://localhost:5173"
 
+    # Langfuse configuration
+    langfuse_public_key: str = ""
+    langfuse_secret_key: str = ""
+    langfuse_base_url: str = "https://jp.cloud.langfuse.com"
+
     # Environment variable configuration
     model_config = SettingsConfigDict(
-        env_file="backend/.env",
+        env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore"
     )

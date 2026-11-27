@@ -28,6 +28,7 @@ class GeneralAgent:
         response = await self.llm_service.generate_response(
             message=prompt,
             provider="ollama",
+            agent_name="general",
         )
 
         return response

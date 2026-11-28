@@ -56,12 +56,10 @@ class SupervisorAgent:
         if re.search(r"\d+\s*[+\-*/]\s*\d+", query):
             return "math"
 
-        # 3. Detect research and comparison requests
+        # 3. Detect explicit research and technology evaluation requests
         research_keywords = [
             "compare",
             "comparison",
-            "difference between",
-            "differences between",
             "advantages and disadvantages",
             "pros and cons",
             "architecture of",
@@ -71,11 +69,11 @@ class SupervisorAgent:
             "evaluate",
             "technical analysis",
             "use cases",
-            "features of",
             "technology trends",
             "which framework",
             "which technology",
             "which platform",
+            "features of",
         ]
 
         if any(keyword in query for keyword in research_keywords):
@@ -91,6 +89,11 @@ class SupervisorAgent:
             "who is",
             "how does",
             "why is",
+            "explain the difference between",
+            "explain the differences between",
+            "difference between",
+            "differences between",
+            "explain",
         ]
 
         if any(keyword in query for keyword in general_keywords):
@@ -103,7 +106,7 @@ class SupervisorAgent:
         Classify the user query into exactly one category:
 
         coding:
-        Writing, debugging, explaining or implementing code.
+        Writing, debugging or implementing code.
 
         math:
         Mathematical calculations, equations and problems.
@@ -130,6 +133,9 @@ class SupervisorAgent:
         Category: math
 
         Query: What is cloud computing?
+        Category: general
+
+        Query: Explain the difference between AI and machine learning.
         Category: general
 
         USER QUERY:
